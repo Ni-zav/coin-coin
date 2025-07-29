@@ -1,10 +1,17 @@
 import { Colors } from '@/constants/Colors';
 import React from 'react';
-import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, useWindowDimensions, ActivityIndicator } from 'react-native';
+import { useTransactions } from '../../context/TransactionContext';
 
 const HomeScreen = () => {
   const { width } = useWindowDimensions();
   const isTablet = width > 600;
+  const { transactions, loading, error } = useTransactions();
+
+  const totalBalance = transactions.reduce((sum, tx) => tx.type === 'income' ? sum + tx.amount : sum - tx.amount, 0);
+  const income = transactions.filter(tx => tx.type === 'income').reduce((sum, tx) => sum + tx.amount, 0);
+  const expense = transactions.filter(tx => tx.type === 'expense').reduce((sum, tx) => sum + tx.amount, 0);
+
   return (
     <View
       style={[styles.container, { paddingHorizontal: isTablet ? 48 : 16 }]}
@@ -12,9 +19,17 @@ const HomeScreen = () => {
       accessibilityLabel="Home screen with balance and summary"
     >
       <Text style={styles.balanceLabel} accessibilityRole="header">Total Balance</Text>
-      <Text style={styles.balanceAmount} accessibilityLabel="Total balance amount">$0.00</Text>
-      {/* chart/graph and summary will be added here */}
+      {loading ? (
+        <ActivityIndicator size="large" color={Colors.light.tint} />
+      ) : (
+        <Text style={styles.balanceAmount} accessibilityLabel="Total balance amount">
+          ${totalBalance.toFixed(2)}
+        </Text>
+      )}
+      {error && <Text style={{ color: 'red' }}>{error}</Text>}
       <Text style={styles.summaryLabel}>Income/Expense Summary</Text>
+      <Text style={{ color: Colors.light.text }}>Income: ${income.toFixed(2)}</Text>
+      <Text style={{ color: Colors.light.text }}>Expense: ${expense.toFixed(2)}</Text>
     </View>
   );
 }
