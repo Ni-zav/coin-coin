@@ -76,7 +76,7 @@ const HomeScreen = () => {
         }}
         accessor="amount"
         backgroundColor={Colors[colorScheme].background}
-        paddingLeft={16}
+        paddingLeft={"16"}
         hasLegend={true}
         center={[0, 0]}
         absolute

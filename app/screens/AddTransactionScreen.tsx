@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ActivityIndicator, Button, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { useTransactions } from '../../context/TransactionContext';
 
-const quickAdds = [
+const quickAdds: { label: string; type: 'income' | 'expense' | null; description: string }[] = [
   { label: '+ Salary', type: 'income', description: 'Salary' },
   { label: '- Grocery', type: 'expense', description: 'Grocery' },
   { label: '- Rent', type: 'expense', description: 'Rent' },
@@ -26,7 +26,7 @@ const AddTransactionScreen = () => {
   const [submitting, setSubmitting] = useState(false);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
-  const handleQuickAdd = (qa) => {
+  const handleQuickAdd = (qa: { label: string; type: 'income' | 'expense' | null; description: string }) => {
     if (qa.type) setType(qa.type);
     setDescription(qa.description);
   };
@@ -55,7 +55,7 @@ const AddTransactionScreen = () => {
   };
 
   // Simple floating date picker modal
-  const handleDatePick = (newDate) => {
+  const handleDatePick = (newDate: string) => {
     setDate(newDate);
     setDatePickerVisible(false);
   };
