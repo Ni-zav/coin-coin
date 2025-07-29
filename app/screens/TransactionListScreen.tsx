@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   header: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
     color: Colors.dark.tint,
     marginBottom: 16,
@@ -66,18 +66,18 @@ const styles = StyleSheet.create({
     boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   },
   amount: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
     color: Colors.dark.text,
     fontFamily: 'SpaceMono',
   },
   desc: {
-    fontSize: 16,
+    fontSize: 13,
     color: Colors.dark.tint,
     fontFamily: 'SpaceMono',
   },
   date: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#888',
     fontFamily: 'SpaceMono',
   },

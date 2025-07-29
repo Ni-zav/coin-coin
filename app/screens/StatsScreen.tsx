@@ -41,13 +41,13 @@ const StatsScreen = () => {
   return (
     <ScrollView style={[styles.container, { paddingHorizontal: isTablet ? 48 : 16 }]}
       contentContainerStyle={{ paddingBottom: 32 }}>
-      <Text style={styles.header}>Stats & Finance Health</Text>
-      <View style={styles.row}>
-        <View style={styles.card}>
+      <Text style={styles.header}>Statistics</Text>
+      <View style={[styles.row, !isTablet && styles.responsiveRow]}>
+        <View style={[styles.card, !isTablet && styles.responsiveCard]}>
           <Text style={styles.label}>Total Transactions</Text>
           <Text style={styles.value}>{totalTx}</Text>
         </View>
-        <View style={styles.card}>
+        <View style={[styles.card, !isTablet && styles.responsiveCard]}>
           <Text style={styles.label}>Avg Transaction</Text>
           <Text style={styles.value}>${avgTx.toFixed(2)}</Text>
         </View>
@@ -90,25 +90,74 @@ const StatsScreen = () => {
         yAxisSuffix=""
       />
       <Text style={styles.section}>Finance Health</Text>
-      <View style={styles.row}>
-        <View style={styles.card}>
+      <View style={styles.halfRow}>
+        <View style={[styles.card, styles.halfCard, styles.leftCard]}>
           <Text style={styles.label}>Expense %</Text>
           <Text style={[styles.value, { color: Colors[colorScheme].expense }]}>{expensePct.toFixed(1)}%</Text>
         </View>
-        <View style={styles.card}>
+        <View style={[styles.card, styles.halfCard, styles.rightCard]}>
           <Text style={styles.label}>Income %</Text>
           <Text style={[styles.value, { color: Colors[colorScheme].income }]}>{incomePct.toFixed(1)}%</Text>
         </View>
-        <View style={styles.card}>
-          <Text style={styles.label}>Saving Rate</Text>
-          <Text style={[styles.value, { color: Colors[colorScheme].tint }]}>{savingRate.toFixed(1)}%</Text>
-        </View>
+      </View>
+      <View style={[styles.card, styles.savingsCard]}>
+        <Text style={styles.label}>Saving Rate</Text>
+        <Text style={[styles.value, { color: Colors[colorScheme].tint }]}>{savingRate.toFixed(1)}%</Text>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  halfRow: {
+    flexDirection: 'row',
+    gap: 0,
+    marginBottom: 0,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+  halfCard: {
+    width: '50%',
+    minWidth: 0,
+    alignSelf: 'stretch',
+    borderRadius: 0,
+  },
+  leftCard: {
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  rightCard: {
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
+  fullWidthRow: {
+    alignItems: 'stretch',
+  },
+  fullWidthCard: {
+    width: '100%',
+    minWidth: 0,
+    alignSelf: 'stretch',
+  },
+  responsiveRow: {
+    flexDirection: 'column',
+    gap: 8,
+    alignItems: 'stretch',
+  },
+  responsiveCard: {
+    minWidth: 0,
+    width: '100%',
+    alignItems: 'center',
+  },
+  savingsCard: {
+    marginTop: 8,
+    alignSelf: 'stretch',
+    width: '100%',
+    minWidth: 0,
+  },
   container: {
     flex: 1,
     backgroundColor: '#000',

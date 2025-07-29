@@ -1,4 +1,5 @@
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Tabs } from 'expo-router';
 import React from 'react';
@@ -23,18 +24,30 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        tabBarActiveTintColor: Colors.dark.tint,
         tabBarLabelStyle: {
-          fontSize: 15,
+          fontSize: 12,
           fontWeight: 'bold',
-          marginTop: 2,
-          marginBottom: 8,
+          marginTop: 0,
+          marginBottom: 0,
           fontFamily: 'SpaceMono',
+          textAlign: 'center',
+          alignSelf: 'center',
+        },
+        tabBarItemStyle: {
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
         },
         tabBarStyle: {
           height: 74,
           backgroundColor: '#000',
           borderTopWidth: 0,
           elevation: 0,
+          paddingTop: 8,
         },
         headerShown: false,
       }}

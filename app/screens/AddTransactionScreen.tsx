@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   header: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
     color: Colors.dark.tint,
     marginBottom: 16,
@@ -184,13 +184,13 @@ const styles = StyleSheet.create({
     color: Colors.dark.income,
     fontWeight: 'bold',
     fontFamily: 'SpaceMono',
-    fontSize: 16,
+    fontSize: 13,
   },
   radioExpense: {
     color: Colors.dark.expense,
     fontWeight: 'bold',
     fontFamily: 'SpaceMono',
-    fontSize: 16,
+    fontSize: 13,
   },
   quickRow: {
     flexDirection: 'row',
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     color: Colors.dark.tint,
     fontFamily: 'SpaceMono',
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 12,
   },
   input: {
     borderWidth: 1,
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 10,
     marginBottom: 12,
-    fontSize: 16,
+    fontSize: 13,
     backgroundColor: Colors.dark.card,
     color: Colors.dark.text,
     fontFamily: 'SpaceMono',
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     color: Colors.dark.tint,
     fontFamily: 'SpaceMono',
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 12,
   },
   row: {
     flexDirection: 'row',
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     color: Colors.dark.tint,
     fontFamily: 'SpaceMono',
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 14,
     marginBottom: 8,
   },
 });
