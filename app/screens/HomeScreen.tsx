@@ -1,6 +1,6 @@
 import { Colors } from '@/constants/Colors';
 import React from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { useTransactions } from '../../context/TransactionContext';
 
@@ -41,8 +41,9 @@ const HomeScreen = () => {
   const recentTx = transactions.slice(0, 5);
 
   return (
-    <View
-      style={[styles.container, { paddingHorizontal: isTablet ? 32 : 16 }]}
+    <ScrollView
+      style={[styles.container, { paddingHorizontal: isTablet ? 32 : 16 }]} 
+      contentContainerStyle={{ paddingBottom: 32 }}
       accessible
       accessibilityLabel="Home screen with balance and summary"
     >
@@ -99,14 +100,14 @@ const HomeScreen = () => {
         )}
         ListEmptyComponent={<Text style={styles.empty}>No transactions yet.</Text>}
       />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.dark.background,
+    backgroundColor: '#000',
     paddingTop: 16,
   },
   header: {
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     minWidth: 120,
-    elevation: 2,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   },
   labelIncome: {
     color: Colors.dark.income,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.card,
     borderRadius: 8,
     borderLeftWidth: 4,
-    elevation: 2,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   },
   amount: {
     fontSize: 18,

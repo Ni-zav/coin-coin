@@ -1,6 +1,6 @@
 import { Colors } from '@/constants/Colors';
 import React, { useState } from 'react';
-import { ActivityIndicator, Button, Modal, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, Button, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { useTransactions } from '../../context/TransactionContext';
 
 const quickAdds: { label: string; type: 'income' | 'expense' | null; description: string }[] = [
@@ -61,8 +61,9 @@ const AddTransactionScreen = () => {
   };
 
   return (
-    <View
-      style={[styles.container, { paddingHorizontal: isTablet ? 32 : 16 }]}
+    <ScrollView
+      style={[styles.container, { paddingHorizontal: isTablet ? 32 : 16 }]} 
+      contentContainerStyle={{ paddingBottom: 32 }}
       accessible
       accessibilityLabel="Add transaction screen"
     >
@@ -135,14 +136,14 @@ const AddTransactionScreen = () => {
         )}
       </View>
       {error && <Text style={styles.error}>{error}</Text>}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.dark.background,
+    backgroundColor: '#000',
     paddingTop: 16,
   },
   header: {
@@ -173,6 +174,7 @@ const styles = StyleSheet.create({
     borderColor: '#444',
     minWidth: 80,
     alignItems: 'center',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   },
   radioSelected: {
     borderColor: Colors.dark.tint,
@@ -203,7 +205,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     margin: 2,
-    elevation: 2,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   },
   quickLabel: {
     color: Colors.dark.tint,

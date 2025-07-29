@@ -61,14 +61,14 @@ const StatsScreen = () => {
         width={width - (isTablet ? 96 : 32)}
         height={180}
         chartConfig={{
-          backgroundColor: Colors[colorScheme].background,
-          backgroundGradientFrom: Colors[colorScheme].background,
-          backgroundGradientTo: Colors[colorScheme].background,
+          backgroundColor: '#000',
+          backgroundGradientFrom: '#000',
+          backgroundGradientTo: '#000',
           color: () => Colors[colorScheme].tint,
           labelColor: () => Colors[colorScheme].text,
         }}
         bezier
-        style={{ borderRadius: 12, marginBottom: 16 }}
+        style={{ borderRadius: 12, marginBottom: 16, backgroundColor: '#000' }}
       />
       <Text style={styles.section}>Monthly Comparison</Text>
       <BarChart
@@ -79,13 +79,13 @@ const StatsScreen = () => {
         width={width - (isTablet ? 96 : 32)}
         height={180}
         chartConfig={{
-          backgroundColor: Colors[colorScheme].background,
-          backgroundGradientFrom: Colors[colorScheme].background,
-          backgroundGradientTo: Colors[colorScheme].background,
+          backgroundColor: '#000',
+          backgroundGradientFrom: '#000',
+          backgroundGradientTo: '#000',
           color: () => Colors[colorScheme].tint,
           labelColor: () => Colors[colorScheme].text,
         }}
-        style={{ borderRadius: 12, marginBottom: 16 }}
+        style={{ borderRadius: 12, marginBottom: 16, backgroundColor: '#000' }}
         yAxisLabel=""
         yAxisSuffix=""
       />
@@ -111,7 +111,7 @@ const StatsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.dark.background,
+    backgroundColor: '#000',
     paddingTop: 16,
   },
   header: {
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     minWidth: 120,
-    elevation: 2,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   },
   label: {
     color: Colors.dark.icon,
