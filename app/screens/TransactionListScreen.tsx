@@ -1,6 +1,6 @@
 import { Colors } from '@/constants/Colors';
 import React from 'react';
-import { StyleSheet, Text, View, useWindowDimensions, ActivityIndicator, FlatList } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useTransactions } from '../../context/TransactionContext';
 
 const TransactionListScreen = () => {
