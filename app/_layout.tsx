@@ -1,33 +1,55 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
+import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useFrameworkReady } from '../hooks/useFrameworkReady';
+import { FinanceProvider } from '../contexts/FinanceContext';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import * as SystemUI from 'expo-system-ui';
 
+useEffect(() => {
+  SystemUI.setBackgroundColorAsync('#121212');
+}, []);
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  useFrameworkReady();
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
+  // Custom inner layout to use hooks
+  function InnerLayout() {
+    const insets = useSafeAreaInsets();
+    
+    // You can set this to match your app theme or system bar color
+    const systemBarColor = '#121212'; // Example: dark mode
+
+    return (
+      <>
+        <StatusBar style="light" backgroundColor={systemBarColor} />
+        <SafeAreaView
+          style={{
+            flex: 1,
+            // Apply all insets to ensure proper spacing
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+            backgroundColor: systemBarColor,
+          }}
+          // Specify which edges to apply insets to
+          edges={["top", "bottom", "left", "right"]}
+        >
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </SafeAreaView>
+      </>
+    );
   }
 
-  // ...existing code...
-  const { TransactionProvider } = require('../context/TransactionContext');
   return (
-    <TransactionProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </TransactionProvider>
+    <FinanceProvider>
+      <SafeAreaProvider>
+        <InnerLayout />
+      </SafeAreaProvider>
+    </FinanceProvider>
   );
 }

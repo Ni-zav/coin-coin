@@ -1,89 +1,77 @@
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { Tabs } from 'expo-router';
-import React from 'react';
-
-function getIconName(routeName: string) {
-  switch (routeName) {
-    case 'HomeScreen':
-      return 'home';
-    case 'TransactionListScreen':
-      return 'money';
-    case 'AddTransactionScreen':
-      return 'plus';
-    case 'StatsScreen':
-      return 'bar-chart';
-    default:
-      return 'circle';
-  }
-}
+import { Chrome as Home, List, Plus, ChartBar as BarChart3 } from 'lucide-react-native';
+import { View, StyleSheet } from 'react-native';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.dark.tint,
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: 'bold',
-          marginTop: 0,
-          marginBottom: 0,
-          fontFamily: 'SpaceMono',
-          textAlign: 'center',
-          alignSelf: 'center',
-        },
-        tabBarItemStyle: {
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-        },
-        tabBarStyle: {
-          height: 74,
-          backgroundColor: '#000',
-          borderTopWidth: 0,
-          elevation: 0,
-          paddingTop: 8,
-        },
         headerShown: false,
-      }}
-    >
+        tabBarStyle: styles.tabBar,
+        tabBarActiveTintColor: '#2563EB',
+        tabBarInactiveTintColor: '#6B7280',
+        tabBarLabelStyle: styles.tabBarLabel,
+      }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol name="home" color={color} size={28} />,
+          tabBarIcon: ({ size, color }) => (
+            <Home size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="transactions"
         options={{
-          title: 'History',
-          tabBarLabel: 'History',
-          tabBarIcon: ({ color }) => <IconSymbol name="money" color={color} size={28} />,
+          title: 'Transactions',
+          tabBarIcon: ({ size, color }) => (
+            <List size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="add"
         options={{
           title: 'Add',
-          tabBarLabel: 'Add',
-          tabBarIcon: ({ color }) => <IconSymbol name="plus" color={color} size={28} />,
+          tabBarIcon: ({ size, color }) => (
+            <View style={[styles.addButton, { backgroundColor: color }]}>
+              <Plus size={size} color="white" />
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
-        name="StatsScreen"
+        name="stats"
         options={{
           title: 'Stats',
-          tabBarLabel: 'Stats',
-          tabBarIcon: ({ color }) => <IconSymbol name="bar-chart" color={color} size={28} />,
+          tabBarIcon: ({ size, color }) => (
+            <BarChart3 size={size} color={color} />
+          ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+    paddingTop: 8,
+    paddingBottom: 8,
+    height: 80,
+  },
+  tabBarLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  addButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
