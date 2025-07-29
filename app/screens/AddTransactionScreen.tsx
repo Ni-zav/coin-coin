@@ -62,24 +62,24 @@ const AddTransactionScreen = () => {
 
   return (
     <View
-      style={[styles.container, { paddingHorizontal: isTablet ? 48 : 16 }]}
+      style={[styles.container, { paddingHorizontal: isTablet ? 32 : 16 }]}
       accessible
       accessibilityLabel="Add transaction screen"
     >
-      <Text style={styles.title} accessibilityRole="header">Add Transaction</Text>
-      {formError ? <Text style={{ color: 'red' }}>{formError}</Text> : null}
+      <Text style={styles.header} accessibilityRole="header">Add Transaction</Text>
+      {formError ? <Text style={styles.error}>{formError}</Text> : null}
       <View style={styles.radioRow}>
         <TouchableOpacity
           style={[styles.radioBtn, type === 'income' && styles.radioSelected]}
           onPress={() => setType('income')}
         >
-          <Text style={{ color: type === 'income' ? Colors[colorScheme].income : Colors[colorScheme].text }}>Income</Text>
+          <Text style={styles.radioIncome}>Income</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.radioBtn, type === 'expense' && styles.radioSelected]}
           onPress={() => setType('expense')}
         >
-          <Text style={{ color: type === 'expense' ? Colors[colorScheme].expense : Colors[colorScheme].text }}>Expense</Text>
+          <Text style={styles.radioExpense}>Expense</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.quickRow}>
@@ -89,7 +89,7 @@ const AddTransactionScreen = () => {
             style={styles.quickBtn}
             onPress={() => handleQuickAdd(qa)}
           >
-            <Text style={{ color: Colors[colorScheme].tint }}>{qa.label}</Text>
+            <Text style={styles.quickLabel}>{qa.label}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -109,12 +109,12 @@ const AddTransactionScreen = () => {
         accessibilityLabel="Description input"
       />
       <TouchableOpacity style={styles.input} onPress={() => setDatePickerVisible(true)}>
-        <Text style={{ color: Colors[colorScheme].tint }}>Date: {date}</Text>
+        <Text style={styles.dateLabel}>Date: {date}</Text>
       </TouchableOpacity>
       <Modal visible={datePickerVisible} transparent animationType="fade">
         <View style={styles.modalBg}>
           <View style={styles.modalContent}>
-            <Text style={{ color: Colors[colorScheme].tint, marginBottom: 8 }}>Pick a date</Text>
+            <Text style={styles.modalTitle}>Pick a date</Text>
             <TextInput
               style={styles.input}
               value={date}
@@ -129,12 +129,12 @@ const AddTransactionScreen = () => {
       </Modal>
       <View style={styles.row}>
         {submitting || loading ? (
-          <ActivityIndicator size="small" color={Colors[colorScheme].tint} />
+          <ActivityIndicator size="small" color={Colors.dark.tint} />
         ) : (
           <Button title="Add Transaction" onPress={handleSubmit} />
         )}
       </View>
-      {error && <Text style={{ color: 'red' }}>{error}</Text>}
+      {error && <Text style={styles.error}>{error}</Text>}
     </View>
   );
 }
@@ -145,21 +145,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.background,
     paddingTop: 16,
   },
-  title: {
-    fontSize: 24,
+  header: {
+    fontSize: 28,
     fontWeight: 'bold',
+    color: Colors.dark.tint,
     marginBottom: 16,
-    color: Colors.dark.text,
+    fontFamily: 'SpaceMono',
+    textAlign: 'center',
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ff9800',
-    borderRadius: 6,
-    padding: 10,
-    marginBottom: 12,
-    fontSize: 16,
-    backgroundColor: Colors.dark.card,
-    color: Colors.dark.text,
+  error: {
+    color: Colors.dark.expense,
+    textAlign: 'center',
+    marginBottom: 8,
+    fontFamily: 'SpaceMono',
   },
   radioRow: {
     flexDirection: 'row',
@@ -177,8 +175,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   radioSelected: {
-    borderColor: '#ff9800',
+    borderColor: Colors.dark.tint,
     backgroundColor: '#222',
+  },
+  radioIncome: {
+    color: Colors.dark.income,
+    fontWeight: 'bold',
+    fontFamily: 'SpaceMono',
+    fontSize: 16,
+  },
+  radioExpense: {
+    color: Colors.dark.expense,
+    fontWeight: 'bold',
+    fontFamily: 'SpaceMono',
+    fontSize: 16,
   },
   quickRow: {
     flexDirection: 'row',
@@ -188,12 +198,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   quickBtn: {
-    backgroundColor: '#232323',
+    backgroundColor: Colors.dark.card,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
     margin: 2,
     elevation: 2,
+  },
+  quickLabel: {
+    color: Colors.dark.tint,
+    fontFamily: 'SpaceMono',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: Colors.dark.tint,
+    borderRadius: 6,
+    padding: 10,
+    marginBottom: 12,
+    fontSize: 16,
+    backgroundColor: Colors.dark.card,
+    color: Colors.dark.text,
+    fontFamily: 'SpaceMono',
+  },
+  dateLabel: {
+    color: Colors.dark.tint,
+    fontFamily: 'SpaceMono',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   row: {
     flexDirection: 'row',
@@ -214,6 +247,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     width: 300,
     alignItems: 'center',
+  },
+  modalTitle: {
+    color: Colors.dark.tint,
+    fontFamily: 'SpaceMono',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 8,
   },
 });
 

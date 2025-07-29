@@ -42,33 +42,33 @@ const HomeScreen = () => {
 
   return (
     <View
-      style={[styles.container, { paddingHorizontal: isTablet ? 48 : 16 }]}
+      style={[styles.container, { paddingHorizontal: isTablet ? 32 : 16 }]}
       accessible
       accessibilityLabel="Home screen with balance and summary"
     >
-      <Text style={styles.balanceLabel} accessibilityRole="header">Total Balance</Text>
+      <Text style={styles.header} accessibilityRole="header">Total Balance</Text>
       {loading ? (
         <ActivityIndicator size="large" color={Colors[colorScheme].tint} />
       ) : (
-        <Text style={styles.balanceAmount} accessibilityLabel="Total balance amount">
+        <Text style={styles.balance} accessibilityLabel="Total balance amount">
           ${totalBalance.toFixed(2)}
         </Text>
       )}
-      {error && <Text style={{ color: 'red' }}>{error}</Text>}
-      <View style={styles.summaryRow}>
-        <View style={styles.summaryBox}>
-          <Text style={{ color: Colors[colorScheme].income, fontWeight: 'bold' }}>Income</Text>
-          <Text style={{ color: Colors[colorScheme].income, fontSize: 18 }}>${income.toFixed(2)}</Text>
+      {error && <Text style={styles.error}>{error}</Text>}
+      <View style={styles.row}>
+        <View style={styles.card}>
+          <Text style={styles.labelIncome}>Income</Text>
+          <Text style={styles.valueIncome}>${income.toFixed(2)}</Text>
         </View>
-        <View style={styles.summaryBox}>
-          <Text style={{ color: Colors[colorScheme].expense, fontWeight: 'bold' }}>Expense</Text>
-          <Text style={{ color: Colors[colorScheme].expense, fontSize: 18 }}>${expense.toFixed(2)}</Text>
+        <View style={styles.card}>
+          <Text style={styles.labelExpense}>Expense</Text>
+          <Text style={styles.valueExpense}>${expense.toFixed(2)}</Text>
         </View>
       </View>
-      <Text style={styles.summaryLabel}>Breakdown</Text>
+      <Text style={styles.section}>Breakdown</Text>
       <PieChart
         data={chartData}
-        width={width - (isTablet ? 96 : 32)}
+        width={width - (isTablet ? 64 : 32)}
         height={180}
         chartConfig={{
           color: () => Colors[colorScheme].tint,
@@ -81,12 +81,12 @@ const HomeScreen = () => {
         center={[0, 0]}
         absolute
       />
-      <Text style={styles.summaryLabel}>Today's Summary</Text>
-      <View style={styles.summaryRow}>
-        <Text style={{ color: Colors[colorScheme].income }}>Income: ${todayIncome.toFixed(2)}</Text>
-        <Text style={{ color: Colors[colorScheme].expense }}>Expense: ${todayExpense.toFixed(2)}</Text>
+      <Text style={styles.section}>Today's Summary</Text>
+      <View style={styles.row}>
+        <Text style={styles.valueIncome}>Income: ${todayIncome.toFixed(2)}</Text>
+        <Text style={styles.valueExpense}>Expense: ${todayExpense.toFixed(2)}</Text>
       </View>
-      <Text style={styles.summaryLabel}>Recent Transactions</Text>
+      <Text style={styles.section}>Recent Transactions</Text>
       <FlatList
         data={recentTx}
         keyExtractor={item => item.id}
@@ -97,7 +97,7 @@ const HomeScreen = () => {
             <Text style={styles.date}>{item.date}</Text>
           </View>
         )}
-        ListEmptyComponent={<Text>No transactions yet.</Text>}
+        ListEmptyComponent={<Text style={styles.empty}>No transactions yet.</Text>}
       />
     </View>
   );
@@ -109,37 +109,75 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.background,
     paddingTop: 16,
   },
-  balanceLabel: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: Colors.dark.text,
-  },
-  balanceAmount: {
-    fontSize: 40,
+  header: {
+    fontSize: 28,
     fontWeight: 'bold',
     color: Colors.dark.tint,
-    marginBottom: 24,
+    marginBottom: 8,
+    fontFamily: 'SpaceMono',
+    textAlign: 'center',
   },
-  summaryLabel: {
+  balance: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: Colors.dark.text,
+    marginBottom: 24,
+    textAlign: 'center',
+    fontFamily: 'SpaceMono',
+  },
+  error: {
+    color: Colors.dark.expense,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 12,
+    justifyContent: 'center',
+  },
+  card: {
+    backgroundColor: Colors.dark.card,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    minWidth: 120,
+    elevation: 2,
+  },
+  labelIncome: {
+    color: Colors.dark.income,
+    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: 'SpaceMono',
+    marginBottom: 4,
+  },
+  valueIncome: {
+    color: Colors.dark.income,
+    fontWeight: 'bold',
+    fontSize: 18,
+    fontFamily: 'SpaceMono',
+  },
+  labelExpense: {
+    color: Colors.dark.expense,
+    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: 'SpaceMono',
+    marginBottom: 4,
+  },
+  valueExpense: {
+    color: Colors.dark.expense,
+    fontWeight: 'bold',
+    fontSize: 18,
+    fontFamily: 'SpaceMono',
+  },
+  section: {
     fontSize: 20,
-    color: Colors.dark.icon,
+    color: Colors.dark.tint,
     marginTop: 16,
     marginBottom: 8,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
-    gap: 16,
-  },
-  summaryBox: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 8,
-    backgroundColor: Colors.dark.card,
-    borderRadius: 8,
-    marginHorizontal: 4,
+    fontWeight: 'bold',
+    fontFamily: 'SpaceMono',
+    textAlign: 'center',
   },
   item: {
     padding: 12,
@@ -153,14 +191,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: Colors.dark.text,
+    fontFamily: 'SpaceMono',
   },
   desc: {
     fontSize: 16,
-    color: '#ff9800',
+    color: Colors.dark.tint,
+    fontFamily: 'SpaceMono',
   },
   date: {
     fontSize: 14,
     color: '#888',
+    fontFamily: 'SpaceMono',
+  },
+  empty: {
+    color: Colors.dark.icon,
+    textAlign: 'center',
+    fontFamily: 'SpaceMono',
+    marginTop: 16,
   },
 });
 

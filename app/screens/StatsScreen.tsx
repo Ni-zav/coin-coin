@@ -41,18 +41,18 @@ const StatsScreen = () => {
   return (
     <ScrollView style={[styles.container, { paddingHorizontal: isTablet ? 48 : 16 }]}
       contentContainerStyle={{ paddingBottom: 32 }}>
-      <Text style={styles.title}>Stats & Finance Health</Text>
+      <Text style={styles.header}>Stats & Finance Health</Text>
       <View style={styles.row}>
-        <View style={styles.statBox}>
+        <View style={styles.card}>
           <Text style={styles.label}>Total Transactions</Text>
           <Text style={styles.value}>{totalTx}</Text>
         </View>
-        <View style={styles.statBox}>
+        <View style={styles.card}>
           <Text style={styles.label}>Avg Transaction</Text>
           <Text style={styles.value}>${avgTx.toFixed(2)}</Text>
         </View>
       </View>
-      <Text style={styles.sectionTitle}>Daily Balance Trend</Text>
+      <Text style={styles.section}>Daily Balance Trend</Text>
       <LineChart
         data={{
           labels: dailyLabels,
@@ -70,7 +70,7 @@ const StatsScreen = () => {
         bezier
         style={{ borderRadius: 12, marginBottom: 16 }}
       />
-      <Text style={styles.sectionTitle}>Monthly Comparison</Text>
+      <Text style={styles.section}>Monthly Comparison</Text>
       <BarChart
         data={{
           labels: monthlyLabels,
@@ -89,17 +89,17 @@ const StatsScreen = () => {
         yAxisLabel=""
         yAxisSuffix=""
       />
-      <Text style={styles.sectionTitle}>Finance Health</Text>
+      <Text style={styles.section}>Finance Health</Text>
       <View style={styles.row}>
-        <View style={styles.statBox}>
+        <View style={styles.card}>
           <Text style={styles.label}>Expense %</Text>
           <Text style={[styles.value, { color: Colors[colorScheme].expense }]}>{expensePct.toFixed(1)}%</Text>
         </View>
-        <View style={styles.statBox}>
+        <View style={styles.card}>
           <Text style={styles.label}>Income %</Text>
           <Text style={[styles.value, { color: Colors[colorScheme].income }]}>{incomePct.toFixed(1)}%</Text>
         </View>
-        <View style={styles.statBox}>
+        <View style={styles.card}>
           <Text style={styles.label}>Saving Rate</Text>
           <Text style={[styles.value, { color: Colors[colorScheme].tint }]}>{savingRate.toFixed(1)}%</Text>
         </View>
@@ -114,19 +114,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.background,
     paddingTop: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: Colors.dark.text,
-    textAlign: 'center',
-  },
-  sectionTitle: {
-    fontSize: 18,
+  header: {
+    fontSize: 28,
     fontWeight: 'bold',
     color: Colors.dark.tint,
-    marginBottom: 8,
+    marginBottom: 16,
+    fontFamily: 'SpaceMono',
+    textAlign: 'center',
+  },
+  section: {
+    fontSize: 20,
+    color: Colors.dark.tint,
     marginTop: 16,
+    marginBottom: 8,
+    fontWeight: 'bold',
+    fontFamily: 'SpaceMono',
+    textAlign: 'center',
   },
   row: {
     flexDirection: 'row',
@@ -134,22 +137,25 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     justifyContent: 'center',
   },
-  statBox: {
+  card: {
     backgroundColor: Colors.dark.card,
-    padding: 12,
-    borderRadius: 8,
+    padding: 16,
+    borderRadius: 12,
     alignItems: 'center',
-    minWidth: 100,
+    minWidth: 120,
+    elevation: 2,
   },
   label: {
     color: Colors.dark.icon,
     fontSize: 14,
     marginBottom: 4,
+    fontFamily: 'SpaceMono',
   },
   value: {
     fontSize: 18,
     fontWeight: 'bold',
     color: Colors.dark.text,
+    fontFamily: 'SpaceMono',
   },
 });
 
