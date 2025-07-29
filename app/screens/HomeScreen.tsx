@@ -6,7 +6,7 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <Text style={styles.balanceLabel}>Total Balance</Text>
       <Text style={styles.balanceAmount}>$0.00</Text>
-      {/* Chart/graph and summary will be added here */}
+      {/* chart/graph and summary will be added here */}
       <Text style={styles.summaryLabel}>Income/Expense Summary</Text>
     </View>
   );

@@ -5,7 +5,7 @@ const AddTransactionScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add Transaction</Text>
-      {/* Transaction form will be implemented here */}
+      {/* transcation form will be implemented here */}
     </View>
   );
 };

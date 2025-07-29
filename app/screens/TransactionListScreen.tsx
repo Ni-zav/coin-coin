@@ -5,7 +5,7 @@ const TransactionListScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Transaction History</Text>
-      {/* Transaction list will be rendered here */}
+      {/* transaction list will be rendered here */}
     </View>
   );
 };
