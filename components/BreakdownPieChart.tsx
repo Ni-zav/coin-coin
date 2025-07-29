@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 
 interface ChartData {
@@ -23,7 +23,7 @@ const BreakdownPieChart: React.FC<BreakdownPieChartProps> = ({ chartData, width 
   };
 
   const pieData = chartData.map(item => ({
-    name: '', // Hide name from PieChart legend
+    name: '', // Empty name ensures no label appears on the chart
     population: item.amount,
     color: item.color,
     legendFontColor: item.legendFontColor,
@@ -34,50 +34,44 @@ const BreakdownPieChart: React.FC<BreakdownPieChartProps> = ({ chartData, width 
     <View
       accessible
       accessibilityLabel="Income/Expense breakdown chart"
-      style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}
+      style={{ width: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
     >
-      <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ width: width / 2, height: 160, alignItems: 'center', justifyContent: 'center', padding: 0, margin: 0, borderWidth: 0 }}>
         <PieChart
+          paddingLeft='50'
           data={pieData}
-          width={width * 0.9}
+          width={width / 1.5}
           height={160}
           chartConfig={{
             color: () => '#fff',
             labelColor: () => '#fff',
-            propsForLabels: {
-              fontFamily: 'SpaceMono',
-              fontWeight: 'bold',
-              fontSize: 14,
-            },
           }}
-          accessor={"population"}
-          backgroundColor={"transparent"}
-          paddingLeft={"0"}
+          accessor="population"
+          backgroundColor="transparent"
           hasLegend={false}
-          center={[0, 0]}
           absolute
+          avoidFalseZero
         />
       </View>
-      {/* Responsive custom legend below chart */}
+      {/* Custom legend to the side of the chart */}
       <View
         style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: 12,
-          rowGap: 8,
-          columnGap: 24,
-          width: '100%',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          marginLeft: 0,
+          padding: 0,
+          borderWidth: 0,
+          width: width / 2,
         }}
       >
         {chartData.map((item, idx) => (
           <View
             key={idx}
-            style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, marginRight: 24 }}
+            style={{ flexDirection: 'row', alignItems: 'center', marginBottom: idx < chartData.length - 1 ? 12 : 0, padding: 0, borderWidth: 0 }}
           >
-            <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: item.color, marginRight: 6 }} />
-            <Text style={{ color: item.color, fontFamily: 'SpaceMono', fontWeight: 'bold', fontSize: 14 }}>
+            <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: item.color, marginRight: 4, padding: 0, borderWidth: 0 }} />
+            <Text style={{ color: item.color, fontFamily: 'SpaceMono', fontWeight: 'bold', fontSize: 14, padding: 0, margin: 0, borderWidth: 0 }}>
               {item.name}: {formatAmount(item.amount)}
             </Text>
           </View>

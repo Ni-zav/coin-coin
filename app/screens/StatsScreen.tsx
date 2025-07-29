@@ -1,5 +1,4 @@
 import { Colors } from '@/constants/Colors';
-import React from 'react';
 import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { BarChart, LineChart } from 'react-native-chart-kit';
 import { useTransactions } from '../../context/TransactionContext';
@@ -38,9 +37,18 @@ const StatsScreen = () => {
   const expensePct = totalIncome ? (totalExpense / totalIncome) * 100 : 0;
   const incomePct = 100 - expensePct;
 
+  const formatAbbr = (value: number | string) => {
+    const num = typeof value === 'string' ? Number(value) : value;
+    if (isNaN(num)) return '$0.00';
+    if (Math.abs(num) >= 1e12) return `$${(num/1e12).toFixed(2)}T`;
+    if (Math.abs(num) >= 1e9) return `$${(num/1e9).toFixed(2)}B`;
+    if (Math.abs(num) >= 1e6) return `$${(num/1e6).toFixed(2)}M`;
+    if (Math.abs(num) >= 1e3) return `$${(num/1e3).toFixed(2)}K`;
+    return `$${num.toFixed(2)}`;
+  };
+
   return (
-    <ScrollView style={[styles.container, { paddingHorizontal: isTablet ? 48 : 16 }]}
-      contentContainerStyle={{ paddingBottom: 32 }}>
+    <ScrollView style={[styles.container, { paddingHorizontal: isTablet ? 48 : 16 }]} contentContainerStyle={{ paddingBottom: 32 }}>
       <Text style={styles.header}>Statistics</Text>
       <View style={[styles.row, !isTablet && styles.responsiveRow]}>
         <View style={[styles.card, !isTablet && styles.responsiveCard]}>
@@ -49,26 +57,33 @@ const StatsScreen = () => {
         </View>
         <View style={[styles.card, !isTablet && styles.responsiveCard]}>
           <Text style={styles.label}>Avg Transaction</Text>
-          <Text style={styles.value}>${avgTx.toFixed(2)}</Text>
+          <Text style={styles.value}>{formatAbbr(avgTx)}</Text>
         </View>
       </View>
       <Text style={styles.section}>Daily Balance Trend</Text>
       <LineChart
         data={{
-          labels: dailyLabels,
-          datasets: [{ data: dailyData }],
+          labels: dailyLabels.map(l => l.slice(5)),
+          datasets: [{ data: dailyData }]
         }}
         width={width - (isTablet ? 96 : 32)}
-        height={180}
+        height={220}
         chartConfig={{
           backgroundColor: '#000',
           backgroundGradientFrom: '#000',
           backgroundGradientTo: '#000',
           color: () => Colors[colorScheme].tint,
           labelColor: () => Colors[colorScheme].text,
+          formatYLabel: (yLabel: string) => formatAbbr(yLabel),
         }}
-        bezier
         style={{ borderRadius: 12, marginBottom: 16, backgroundColor: '#000' }}
+        bezier
+        withShadow
+        withInnerLines
+        withOuterLines
+        yLabelsOffset={8}
+        segments={5}
+        fromZero
       />
       <Text style={styles.section}>Monthly Comparison</Text>
       <BarChart
@@ -84,6 +99,7 @@ const StatsScreen = () => {
           backgroundGradientTo: '#000',
           color: () => Colors[colorScheme].tint,
           labelColor: () => Colors[colorScheme].text,
+          formatYLabel: (yLabel: string) => formatAbbr(yLabel),
         }}
         style={{ borderRadius: 12, marginBottom: 16, backgroundColor: '#000' }}
         yAxisLabel=""

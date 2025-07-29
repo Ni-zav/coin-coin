@@ -1,6 +1,7 @@
 import { Colors } from '@/constants/Colors';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
-import { ActivityIndicator, Button, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, Button, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { useTransactions } from '../../context/TransactionContext';
 
 const quickAdds: { label: string; type: 'income' | 'expense' | null; description: string }[] = [
@@ -16,7 +17,6 @@ const AddTransactionScreen = () => {
   const { width } = useWindowDimensions();
   const isTablet = width > 600;
   const { addTransaction, loading, error } = useTransactions();
-  const colorScheme = 'dark';
 
   const [type, setType] = useState<'income' | 'expense'>('income');
   const [amount, setAmount] = useState('');
@@ -24,7 +24,8 @@ const AddTransactionScreen = () => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [formError, setFormError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const isWeb = Platform.OS === 'web';
 
   const handleQuickAdd = (qa: { label: string; type: 'income' | 'expense' | null; description: string }) => {
     if (qa.type) setType(qa.type);
@@ -54,16 +55,19 @@ const AddTransactionScreen = () => {
     }
   };
 
-  // Simple floating date picker modal
-  const handleDatePick = (newDate: string) => {
-    setDate(newDate);
-    setDatePickerVisible(false);
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
+    }
+    if (selectedDate) {
+      setDate(selectedDate.toISOString().slice(0, 10));
+    }
   };
 
   return (
     <ScrollView
-      style={[styles.container, { paddingHorizontal: isTablet ? 32 : 16 }]} 
-      contentContainerStyle={{ paddingBottom: 32 }}
+      style={[styles.container, isTablet ? styles.tabletPadding : styles.phonePadding]}
+      contentContainerStyle={styles.contentContainer}
       accessible
       accessibilityLabel="Add transaction screen"
     >
@@ -73,12 +77,16 @@ const AddTransactionScreen = () => {
         <TouchableOpacity
           style={[styles.radioBtn, type === 'income' && styles.radioSelected]}
           onPress={() => setType('income')}
+          accessibilityRole="button"
+          accessibilityLabel="Income"
         >
           <Text style={styles.radioIncome}>Income</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.radioBtn, type === 'expense' && styles.radioSelected]}
           onPress={() => setType('expense')}
+          accessibilityRole="button"
+          accessibilityLabel="Expense"
         >
           <Text style={styles.radioExpense}>Expense</Text>
         </TouchableOpacity>
@@ -89,6 +97,8 @@ const AddTransactionScreen = () => {
             key={idx}
             style={styles.quickBtn}
             onPress={() => handleQuickAdd(qa)}
+            accessibilityRole="button"
+            accessibilityLabel={qa.label}
           >
             <Text style={styles.quickLabel}>{qa.label}</Text>
           </TouchableOpacity>
@@ -97,6 +107,7 @@ const AddTransactionScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Amount"
+        placeholderTextColor="#888"
         keyboardType="numeric"
         value={amount}
         onChangeText={setAmount}
@@ -105,34 +116,99 @@ const AddTransactionScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Description"
+        placeholderTextColor="#888"
         value={description}
         onChangeText={setDescription}
         accessibilityLabel="Description input"
       />
-      <TouchableOpacity style={styles.input} onPress={() => setDatePickerVisible(true)}>
-        <Text style={styles.dateLabel}>Date: {date}</Text>
-      </TouchableOpacity>
-      <Modal visible={datePickerVisible} transparent animationType="fade">
-        <View style={styles.modalBg}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Pick a date</Text>
-            <TextInput
-              style={styles.input}
+      <View style={styles.dateContainer}>
+        <Text style={styles.dateLabel}>Date:</Text>
+        {isWeb ? (
+          <View style={styles.webDateContainer}>
+            <label htmlFor="transaction-date" style={styles.webDateLabel}>Transaction Date</label>
+            <input
+              id="transaction-date"
+              type="date"
               value={date}
-              onChangeText={setDate}
-              placeholder="YYYY-MM-DD"
-              keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'numeric'}
+              onChange={e => setDate(e.target.value)}
+              style={styles.webDateInput}
+              aria-label="Transaction date"
             />
-            <Button title="Set Date" onPress={() => handleDatePick(date)} />
-            <Button title="Cancel" onPress={() => setDatePickerVisible(false)} color="gray" />
           </View>
-        </View>
-      </Modal>
-      <View style={styles.row}>
+        ) : (
+          <>
+            <TouchableOpacity 
+              onPress={() => setShowDatePicker(true)} 
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="Select date"
+              style={styles.dateInputTouchable}
+            >
+              <TextInput
+                style={styles.dateInput}
+                value={date}
+                onChangeText={setDate}
+                placeholder="YYYY-MM-DD"
+                placeholderTextColor="#888"
+                keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'numeric'}
+                accessibilityLabel="Date input"
+                editable={false}
+                pointerEvents="none"
+              />
+            </TouchableOpacity>
+            {showDatePicker && (
+              <>
+                {Platform.OS === 'ios' ? (
+                  <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                      <View style={styles.modalHeader}>
+                        <TouchableOpacity 
+                          onPress={() => setShowDatePicker(false)}
+                          accessibilityRole="button"
+                          accessibilityLabel="Cancel date selection"
+                        >
+                          <Text style={styles.modalButton}>Cancel</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.modalTitle}>Select Date</Text>
+                        <TouchableOpacity 
+                          onPress={() => setShowDatePicker(false)}
+                          accessibilityRole="button"
+                          accessibilityLabel="Confirm date selection"
+                        >
+                          <Text style={styles.modalButton}>Done</Text>
+                        </TouchableOpacity>
+                      </View>
+                      <DateTimePicker
+                        value={new Date(date)}
+                        mode="date"
+                        display="spinner"
+                        onChange={handleDateChange}
+                        style={styles.datePicker}
+                      />
+                    </View>
+                  </View>
+                ) : (
+                  <DateTimePicker
+                    value={new Date(date)}
+                    mode="date"
+                    display="default"
+                    onChange={handleDateChange}
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
+      </View>
+      <View style={styles.buttonContainer}>
         {submitting || loading ? (
           <ActivityIndicator size="small" color={Colors.dark.tint} />
         ) : (
-          <Button title="Add Transaction" onPress={handleSubmit} />
+          <Button 
+            title="Add Transaction" 
+            onPress={handleSubmit} 
+            accessibilityLabel="Add transaction button"
+          />
         )}
       </View>
       {error && <Text style={styles.error}>{error}</Text>}
@@ -145,6 +221,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
     paddingTop: 16,
+  },
+  tabletPadding: {
+    paddingHorizontal: 32,
+  },
+  phonePadding: {
+    paddingHorizontal: 16,
+  },
+  contentContainer: {
+    paddingBottom: 32,
   },
   header: {
     fontSize: 22,
@@ -174,7 +259,11 @@ const styles = StyleSheet.create({
     borderColor: '#444',
     minWidth: 80,
     alignItems: 'center',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 2,
   },
   radioSelected: {
     borderColor: Colors.dark.tint,
@@ -205,7 +294,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     margin: 2,
-    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 2,
   },
   quickLabel: {
     color: Colors.dark.tint,
@@ -224,38 +317,93 @@ const styles = StyleSheet.create({
     color: Colors.dark.text,
     fontFamily: 'SpaceMono',
   },
+  dateContainer: {
+    marginBottom: 16,
+  },
   dateLabel: {
     color: Colors.dark.tint,
     fontFamily: 'SpaceMono',
     fontWeight: 'bold',
     fontSize: 12,
   },
-  row: {
+  dateInputTouchable: {
+    flex: 1,
+  },
+  dateInput: {
+    borderWidth: 1,
+    borderColor: Colors.dark.tint,
+    borderRadius: 6,
+    padding: 10,
+    fontSize: 13,
+    backgroundColor: Colors.dark.card,
+    color: Colors.dark.text,
+    fontFamily: 'SpaceMono',
+  },
+  buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
     gap: 8,
     justifyContent: 'center',
   },
-  modalBg: {
-    flex: 1,
+  modalContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   modalContent: {
     backgroundColor: Colors.dark.card,
-    padding: 24,
-    borderRadius: 12,
-    width: 300,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 16,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 16,
   },
   modalTitle: {
     color: Colors.dark.tint,
     fontFamily: 'SpaceMono',
     fontWeight: 'bold',
-    fontSize: 14,
-    marginBottom: 8,
+    fontSize: 16,
+  },
+  modalButton: {
+    color: Colors.dark.tint,
+    fontFamily: 'SpaceMono',
+    fontSize: 16,
+  },
+  datePicker: {
+    width: '100%',
+    backgroundColor: Colors.dark.card,
+  },
+  webDateContainer: {
+    marginTop: 4,
+  },
+  webDateLabel: {
+    position: 'absolute',
+    width: 1,
+    height: 1,
+    padding: 0,
+    margin: -1,
+    overflow: 'hidden',
+    clip: 'rect(0, 0, 0, 0)',
+    borderWidth: 0,
+  },
+  webDateInput: {
+    padding: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: Colors.dark.tint,
+    backgroundColor: Colors.dark.card,
+    color: Colors.dark.text,
+    fontFamily: 'SpaceMono',
+    fontSize: 13,
+    width: '100%',
   },
 });
 

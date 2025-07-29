@@ -1,12 +1,18 @@
 import { Colors } from '@/constants/Colors';
+import { Feather } from '@expo/vector-icons';
 import React from 'react';
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { useTransactions } from '../../context/TransactionContext';
 
 const TransactionListScreen = () => {
   const { width } = useWindowDimensions();
   const isTablet = width > 600;
-  const { transactions, loading, error } = useTransactions();
+  const { transactions, loading, error, deleteTransaction, refresh } = useTransactions();
+
+  const handleDelete = async (id: string) => {
+    await deleteTransaction(id);
+    await refresh();
+  };
 
   return (
     <ScrollView
@@ -25,10 +31,22 @@ const TransactionListScreen = () => {
           data={transactions}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <View style={[styles.item, { borderLeftColor: item.type === 'income' ? Colors.dark.income : Colors.dark.expense }]}> 
-              <Text style={styles.amount}>{item.type === 'income' ? '+' : '-'}${item.amount.toFixed(2)}</Text>
-              <Text style={styles.desc}>{item.description}</Text>
-              <Text style={styles.date}>{item.date}</Text>
+            <View style={[styles.item, { borderLeftColor: item.type === 'income' ? Colors.dark.income : Colors.dark.expense, flexDirection: 'row', alignItems: 'center' }]}> 
+              <View style={{ flex: 1 }}>
+                <Text style={styles.amount}>
+                  {item.type === 'income' ? '+' : '-'}{`$${item.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                </Text>
+                <Text style={styles.desc}>{item.description}</Text>
+                <Text style={styles.date}>{item.date}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                <TouchableOpacity onPress={() => {/* TODO: handle edit */}} accessibilityLabel="Edit transaction">
+                  <Feather name="edit" size={20} color={Colors.dark.tint} style={{ marginLeft: 4 }} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleDelete(item.id)} accessibilityLabel="Delete transaction">
+                  <Feather name="trash-2" size={20} color={Colors.dark.expense} style={{ marginLeft: 4 }} />
+                </TouchableOpacity>
+              </View>
             </View>
           )}
           ListEmptyComponent={<Text style={styles.empty}>No transactions yet.</Text>}

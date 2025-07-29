@@ -178,6 +178,16 @@ const HomeScreen = () => {
   const todayExpense = transactions.filter(tx => tx.type === 'expense' && tx.date === today).reduce((sum, tx) => sum + tx.amount, 0);
   const monthlyAvgExpense = transactions.filter(tx => tx.type === 'expense').reduce((sum, tx) => sum + tx.amount, 0) / moment().daysInMonth();
 
+  // Abbreviation formatter for chart y-axis
+  const formatAbbr = (yLabel: string) => {
+    const num = Number(yLabel);
+    if (Math.abs(num) >= 1e12) return `${(num/1e12).toFixed(2)}T`;
+    if (Math.abs(num) >= 1e9) return `${(num/1e9).toFixed(2)}B`;
+    if (Math.abs(num) >= 1e6) return `${(num/1e6).toFixed(2)}M`;
+    if (Math.abs(num) >= 1e3) return `${(num/1e3).toFixed(2)}K`;
+    return num.toString();
+  };
+
   return (
     <ScrollView
       style={[styles.container]}
@@ -195,7 +205,7 @@ const HomeScreen = () => {
           Welcome back!
         </Text>
         <Text style={styles.balance} accessibilityLabel="Total balance amount">
-          ${totalBalance.toFixed(2)}
+          {`$${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
         </Text>
       </View>
 
@@ -263,9 +273,16 @@ const HomeScreen = () => {
           backgroundGradientTo: Colors[colorScheme].card,
           decimalPlaces: 2,
           labelColor: () => Colors[colorScheme].text,
+          formatYLabel: formatAbbr,
         }}
         bezier
         style={{ marginVertical: 8, borderRadius: 12 }}
+        withHorizontalLines
+        withVerticalLines
+        withShadow
+        yLabelsOffset={8}
+        segments={5}
+        fromZero
       />
 
       {/* Recent Transactions */}
@@ -284,7 +301,7 @@ const HomeScreen = () => {
             />
             <View style={styles.itemContent}>
               <Text style={styles.amount}>
-                {item.type === 'income' ? '+' : '-'}${item.amount.toFixed(2)}
+                {item.type === 'income' ? '+' : '-'}{`$${item.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
               </Text>
               <Text style={styles.desc}>{item.description}</Text>
               <Text style={styles.date}>{moment(item.date).format('MMM D')}</Text>
