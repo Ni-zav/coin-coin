@@ -18,33 +18,56 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
+        tabBarLabelPosition: 'below-icon',
+      tabBarLabelStyle: {
+        fontSize: 14,
+        fontWeight: '600',
+        marginTop: 2,
+        paddingBottom: 2,
+      },
+      tabBarItemStyle: {
+        height: 80,
+        paddingVertical: 8,
+      },
+      tabBarStyle: Platform.select({
+        ios: {
+          position: 'absolute',
+          height: 80,
+          paddingBottom: 10,
+        },
+        default: {
+          height: 80,
+          paddingBottom: 6,
+        },
+      }),
+
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={32} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="transactions"
         options={{
           title: 'Transactions',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="list.bullet" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={32} name="attach-money" color={color} />,
         }}
       />
       <Tabs.Screen
         name="add"
         options={{
           title: 'Add',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="plus.circle.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={32} name="add" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="StatsScreen"
+        options={{
+          title: 'Stats',
+          tabBarIcon: ({ color }) => <IconSymbol size={32} name="bar-chart" color={color} />,
         }}
       />
     </Tabs>
