@@ -1,77 +1,57 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, List, Plus, ChartBar as BarChart3 } from 'lucide-react-native';
-import { View, StyleSheet } from 'react-native';
+import { Chrome as Home, List, Plus } from 'lucide-react-native';
+import { StatusBar } from 'expo-status-bar';
 
 export default function TabLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: styles.tabBar,
-        tabBarActiveTintColor: '#2563EB',
-        tabBarInactiveTintColor: '#6B7280',
-        tabBarLabelStyle: styles.tabBarLabel,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ size, color }) => (
-            <Home size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="transactions"
-        options={{
-          title: 'Transactions',
-          tabBarIcon: ({ size, color }) => (
-            <List size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="add"
-        options={{
-          title: 'Add',
-          tabBarIcon: ({ size, color }) => (
-            <View style={[styles.addButton, { backgroundColor: color }]}>
-              <Plus size={size} color="white" />
-            </View>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="stats"
-        options={{
-          title: 'Stats',
-          tabBarIcon: ({ size, color }) => (
-            <BarChart3 size={size} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+    <>
+      <StatusBar style="light" backgroundColor="#000000" />
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: '#000000',
+            borderTopColor: '#FF6B35',
+            borderTopWidth: 1,
+            height: 70,
+            paddingBottom: 10,
+            paddingTop: 10,
+          },
+          tabBarActiveTintColor: '#FF6B35',
+          tabBarInactiveTintColor: '#666666',
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: '500',
+          },
+        }}>
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Home',
+            tabBarIcon: ({ size, color }) => (
+              <Home size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="transactions"
+          options={{
+            title: 'Transactions',
+            tabBarIcon: ({ size, color }) => (
+              <List size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="add"
+          options={{
+            title: 'Add',
+            tabBarIcon: ({ size, color }) => (
+              <Plus size={size} color={color} />
+            ),
+          }}
+        />
+      </Tabs>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBar: {
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    paddingTop: 8,
-    paddingBottom: 8,
-    height: 80,
-  },
-  tabBarLabel: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  addButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

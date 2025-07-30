@@ -19,17 +19,6 @@
     "plugins": ["expo-router", "expo-font", "expo-web-browser"],
     "experiments": {
       "typedRoutes": true
-    },
-    "androidNavigationBar": {
-  "backgroundColor": "#121212",
-  "barStyle": "light-content"
-},
-    "android": {
-      "softwareKeyboardLayoutMode": "resize",
-      "navigationBar": {
-        "backgroundColor": "#121212",
-        "visible": "immersive"
-      }
     }
   }
 }
